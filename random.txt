@@ -53,3 +53,29 @@ public class HealthCheck {
         return result;
     }
 }
+
+ private function nlevenshtein(s1:String, s2:String):Number {
+     var tokens1:Array = s1.split(" ");
+     var tokens2:Array = s2.split(" ");
+     const len1:uint = tokens1.length, len2:uint = tokens2.length;
+     var d:Vector.<Vector.<uint> >=new Vector.<Vector.<uint> >(len1+1);
+     for(i=0; i<=len1; ++i)
+        d[i] = new Vector.<uint>(len2+1);
+
+     d[0][0]=0;
+
+     var i:int;
+     var j:int;
+
+     for(i=1; i<=len1; ++i) d[i][0]=i; 
+     for(i=1; i<=len2; ++i) d[0][i]=i;
+
+     for(i = 1; i <= len1; ++i)
+        for(j = 1; j <= len2; ++j)
+           d[i][j] = Math.min( Math.min(d[i - 1][j] + 1,d[i][j - 1] + 1),
+              d[i - 1][j - 1] + (tokens1[i - 1] == tokens2[j - 1] ? 0 : 1) );
+
+     var nlevenshteinDist:Number = (d[len1][len2]) / (Math.max(len1, len2));
+
+     return nlevenshteinDist;
+  }
