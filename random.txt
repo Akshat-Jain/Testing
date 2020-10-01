@@ -54,6 +54,42 @@ public class HealthCheck {
     }
 }
 
+public class EditDistance {
+
+    public int editDistanceDP(String sentence1, String sentence2) {
+        String[] s1 = sentence1.split(" ");
+        String[] s2 = sentence2.split(" ");
+        int[][] solution = new int[s1.length + 1][s2.length + 1];
+
+        for (int i = 0; i <= s2.length; i++) {
+            solution[0][i] = i;
+        }
+
+        for (int i = 0; i <= s1.length; i++) {
+            solution[i][0] = i;
+        }
+
+        int m = s1.length;
+        int n = s2.length;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (s1[i - 1].equals(s2[j - 1]))
+                    solution[i][j] = solution[i - 1][j - 1];
+                else
+                    solution[i][j] = 1
+                            + Math.min(solution[i][j - 1], Math.min(solution[i - 1][j], solution[i - 1][j - 1]));
+            }
+        }
+        return solution[s1.length][s2.length];
+    }
+
+    public static void main(String[] args) {
+        String sentence1 = "first second third";
+        String sentence2 = "second";
+        EditDistance ed = new EditDistance();
+        System.out.println("Edit Distance: " + ed.editDistanceDP(sentence1, sentence2));
+    }
+}
  private function nlevenshtein(s1:String, s2:String):Number {
      var tokens1:Array = s1.split(" ");
      var tokens2:Array = s2.split(" ");
